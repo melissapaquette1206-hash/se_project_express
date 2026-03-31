@@ -21,8 +21,11 @@ const createUser = (req, res) => {
     .then((user) => res.status(201).send(user))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: err.message });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "User not found" });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
@@ -36,9 +39,10 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_ERROR_CODE || 400)
-          .send({ message: err.message });
+        return res.status(BAD_REQUEST).send({ message: err.message });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "User not found" });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });

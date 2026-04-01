@@ -4,7 +4,7 @@ const mainRouter = require("./routes/index");
 
 const app = express();
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
@@ -14,7 +14,7 @@ mongoose
 app.use(express.json());
 
 app.use((req, res, next) => {
-  req.user = { _id: "some-valid-mongodb-id" };
+  req.user = { _id: "69cd5dfc566af1f72942093f" };
   next();
 });
 

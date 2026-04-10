@@ -38,41 +38,20 @@ const getItems = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  const { itemId } = req.params;
-  const userId = req.user._id;
-
-  ClothingItem.findById(itemId)
-    .orFail(() => new Error("Item not found"))
+  Item.findById(req.params.itemId)
     .then((item) => {
-      if (item.owner.toString() !== userId.toString()) {
-        const err = new Error("You are not authorized to delete this item");
-        err.statusCode = FORBIDDEN;
-        throw err;
+      if (!item) {
+        return res.status(404).send({ message: "Item not found" });
       }
-      return ClothingItem.findByIdAndDelete(itemId).then(() =>
-        res.status(200).send(item)
-      );
+
+      if (item.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: "Forbidden" });
+      }
+
+      return item.deleteOne().then(() => res.send({ message: "Deleted" }));
     })
-
-    .catch((err) => {
-      console.error(err);
-
-      if (err.message === "Item not found") {
-        return res.status(NOT_FOUND).send({ message: "Item not found" });
-      }
-      if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid Request" });
-      }
-
-      if (err.statusCode === FORBIDDEN) {
-        return res
-          .status(FORBIDDEN)
-          .send({ message: "You are not authorized to delete this item" });
-      }
-
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error has occurred on the server." });
+    .catch(() => {
+      res.status(500).send({ message: "Server error" });
     });
 };
 

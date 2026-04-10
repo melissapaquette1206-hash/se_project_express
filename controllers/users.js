@@ -4,24 +4,22 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 
-app.patch('/users/me', updateUser);
+// const {
+//   BAD_REQUEST,
+//   NOT_FOUND,
+//   INTERNAL_SERVER_ERROR,
+// } = require("../utils/errors");
 
-const {
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-} = require("../utils/errors");
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Server error" });
-    });
-};
+// const getUsers = (req, res) => {
+//   User.find({})
+//     .then((users) => res.status(200).send(users))
+//     .catch((err) => {
+//       console.error(err);
+//       return res
+//         .status(INTERNAL_SERVER_ERROR)
+//         .send({ message: "Server error" });
+//     });
+// };
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -47,7 +45,11 @@ const createUser = (req, res) => {
         return res.status(409).send({ message: "Email already exists" });
       }
 
-      res.status(500).send({ message: "Server error" });
+      if (err.name === "ValidationError") {
+        return res.status(400).send({ message: "Invalid data" });
+      }
+
+      return res.status(500).send({ message: "Server error" });
     });
 };
 
@@ -105,4 +107,10 @@ const updateUser = (req, res) => {
     });
 };
 
-module.exports = { getUsers, createUser, getUser };
+module.exports = {
+  // getUsers,
+  createUser,
+  getCurrentUser,
+  login,
+  updateUser,
+};

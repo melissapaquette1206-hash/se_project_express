@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const validator = require("validator");
 
@@ -24,6 +25,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: (v) => validator.isEmail(v),
+      message: "Invalid email format",
     },
   },
   password: {

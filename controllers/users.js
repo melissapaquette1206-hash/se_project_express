@@ -4,11 +4,13 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 
-// const {
-//   BAD_REQUEST,
-//   NOT_FOUND,
-//   INTERNAL_SERVER_ERROR,
-// } = require("../utils/errors");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  SERVER_ERROR,
+  CONFLICT,
+  UNAUTHORIZED,
+} = require("../utils/errors");
 
 // const getUsers = (req, res) => {
 //   User.find({})
@@ -42,14 +44,14 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        return res.status(409).send({ message: "Email already exists" });
+        return res.status(CONFLICT).send({ message: "Email already exists" });
       }
 
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: "Invalid data" });
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
       }
 
-      return res.status(500).send({ message: "Server error" });
+      return res.status(SERVER_ERROR).send({ message: "Server error" });
     });
 };
 
@@ -57,13 +59,13 @@ const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User not found" });
+        return res.status(NOT_FOUND).send({ message: "User not found" });
       }
 
       res.send(user);
     })
     .catch(() => {
-      res.status(500).send({ message: "Server error" });
+      res.status(SERVER_ERROR).send({ message: "Server error" });
     });
 };
 
@@ -79,7 +81,7 @@ const login = (req, res) => {
       res.send({ token });
     })
     .catch(() => {
-      res.status(401).send({ message: "Invalid email or password" });
+      res.status(UNAUTHORIZED).send({ message: "Invalid email or password" });
     });
 };
 
@@ -93,22 +95,21 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User not found" });
+        return res.status(NOT_FOUND).send({ message: "User not found" });
       }
 
       res.send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: "Invalid data" });
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
       }
 
-      res.status(500).send({ message: "Server error" });
+      res.status(SERVER_ERROR).send({ message: "Server error" });
     });
 };
 
 module.exports = {
-  // getUsers,
   createUser,
   getCurrentUser,
   login,

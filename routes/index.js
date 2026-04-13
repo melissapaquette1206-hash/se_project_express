@@ -1,16 +1,13 @@
 const router = require("express").Router();
+const auth = require("../middlewares/auth");
 
-const { NOT_FOUND } = require("../utils/errors");
+router.post("/signup", createUser);
+router.post("/signin", login);
+router.get("/items", getItems);
 
-const userRouter = require("./users");
+router.use(auth);
 
-const clothingItemsRouter = require("./clothingItems");
-
-router.use("/users", userRouter);
-router.use("/items", clothingItemsRouter);
-
-router.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: "Requested resource not found" });
-});
+router.use("/users", usersRouter);
+router.use("/items", protectedItemsRouter);
 
 module.exports = router;

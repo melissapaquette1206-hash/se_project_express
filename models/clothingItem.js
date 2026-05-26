@@ -20,7 +20,7 @@ const clothingItemSchema = new mongoose.Schema({
       validator(value) {
         return validator.isURL(value);
       },
-      message: "Link is not valid",
+      message: "Invalid URL",
     },
   },
   owner: {
@@ -28,14 +28,16 @@ const clothingItemSchema = new mongoose.Schema({
     ref: "user",
     required: true,
   },
-  likes: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "user",
-    default: [],
-  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
+    required: true,
   },
 });
 

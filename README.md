@@ -16,6 +16,10 @@ The back-end project is focused on creating a server for the WTWR application. Y
 - **ESLint** - Code linting with Airbnb configuration
 - **Nodemon** - Development tool for auto-restarting the server
 
+## Links
+
+- [Frontend Repository](https://github.com/melissapaquette1206-hash/se_project_react.git)
+
 ### Testing
 
 Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12

@@ -1,3 +1,5 @@
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -17,6 +19,12 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
 
 // app.post("/signup", createUser);
 // app.post("/signin", login);

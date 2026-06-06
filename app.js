@@ -3,6 +3,7 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 
 const mainRouter = require("./routes/index");
 // const auth = require("./middlewares/auth");

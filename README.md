@@ -19,6 +19,8 @@ The back-end project is focused on creating a server for the WTWR application. Y
 ## Links
 
 - [Frontend Repository](https://github.com/melissapaquette1206-hash/se_project_react.git)
+- Frontend: https://your-frontend-url.com
+- Backend: https://your-backend-url.com
 
 ### Testing
 

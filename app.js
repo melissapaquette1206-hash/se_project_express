@@ -21,6 +21,8 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
+app.use(requestLogger);
+
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
@@ -31,6 +33,7 @@ app.get("/crash-test", () => {
 // app.post("/signin", login);
 
 app.use("/", mainRouter);
+app.use(errorLogger);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
